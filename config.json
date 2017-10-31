@@ -1,0 +1,80 @@
+{
+    "BBA Structure": {
+        "1.0 - Administration": [
+            "1.1 - Project Directory",
+            "1.2 - Program",
+            "1.3 - Design Information & Notes",
+            "1.4 - Cost Estimates",
+            "1.5 - Specification Information",
+            "1.6 - Site Information (Geotech-Survey)",
+            "1.7 - Code Search",
+            "1.8 - Structural Calculations",
+
+            "2.0 - Project Management",
+            "2.1 - Scope of Work",
+            "2.2 - Consultant Contracts",
+            "2.3 - Schedule",
+            "2.4 - Meeting Minutes",
+            "2.5 - Transmittals",
+
+            "3.0 - General Correspondence",
+            "3.1 - Client Correspondence",
+            "3.2 - Owner Representative Correspondence",
+            "3.3 - Civil",
+            "3.4 - Landscape",
+            "3.5 - Structural",
+            "3.6 - MEPF",
+            "3.7 - X-Consultants Correspondence",
+            "3.8 - Interior Designer Consultant [Outside BBA]",
+            "3.9 - In-House",
+
+            "4.0 - AHJ Code Correspondence",
+            "4.1 - City-County",
+            "4.2 - State",
+            "4.3 - Utilities",
+            "4.4 - Water Management",
+            "4.5 - Fire Marshal",
+            "4.6 - Others",
+
+            "5.0 - Bidding Negotiations",
+            "5.1 - General",
+            "5.2 - Addenda",
+            "5.3 - Costs",
+
+            "6.0 - Contractor Correspondence",
+
+            "7.0 - Submittals (Shop Drawings)",
+            "7.1 - Schedules",
+            "7.2 - CA Meeting Minutes",
+            "7.3 - Field Reports",
+            "7.4 - Testing",
+            "7.5 - RFIs",
+            "7.6 - ASIs",
+            "7.7 - Proposal Requests (AIA)",
+            "7.8 - Change Order - Directives",
+            "7.9 - Pay Applications",
+            "7.10 - Punch List",
+
+            "8.0 - Specific Issues (track project specific items that arise during the project)"
+        ],
+        "2.0 - Drawings": [],
+        "3.0 - PDF": [],
+        "4.0 - Photos": [],
+        "5.0 - Concept-SD": [
+            "4.1 - Scans",
+            "4.2 - Photos",
+            "4.3 - Site Plans",
+            "4.4 - Floor Plans",
+            "4.5 - Elevations",
+            "4.6 - Sections",
+            "4.7 - Perspectives",
+            "4.8 - Renderings"
+        ],
+        "6.0 - Presentations": [
+            "5.1 - Indesign",
+            "5.2 - PDFs",
+            "5.3 - PPT",
+            "5.4 - Nscape"
+        ]
+    }
+}
