@@ -1,11 +1,12 @@
 """
+#==============================================================================
 #!/usr/bin/env python
-#title           :CreateJointAtPivot.py
+#title           :BBA_Project_Generator.py
 #description     :Script used to automate project folder creation
 #author          :Doug Halley
-#date            :20171031
-#version         :1.0
-#usage           :In Maya CreateJointAtPivot.CreateJointAtPivot()
+#date            :20171103
+#version         :2.0
+#usage           :Standalone Python Application Executed by BBA_Project_Generator.exe
 #notes           :
 #python_version  :2.7.14
 #pyqt_version    :4.11.4
@@ -14,13 +15,8 @@
 
 import os
 import sys
-import stat
 import json
-import shutil
 import datetime
-import pyperclip
-
-from functools import partial
 
 from PyQt4 import QtGui
 from PyQt4 import QtCore
@@ -46,16 +42,22 @@ class Main(QtGui.QMainWindow):
         # Global Variables
         #==============================================================================
 
-        #window title
-        self.setWindowTitle("BBA Project Generator")  
+        # window title
+        self.setWindowTitle("BBA Project Generator")
 
-        #os.path.realpath(__file__) -  gets path of the current file
-        self.scriptLocation = os.path.dirname(os.path.realpath(__file__))
+        if getattr(sys, 'frozen', False):
+            # we are running in a |PyInstaller| bundle
+            self.scriptLocation = sys._MEIPASS
+        else:
+            # we are running in a normal Python environment
+            # os.path.realpath(__file__) -  gets path of the current file
+            self.scriptLocation = os.path.dirname(os.path.realpath(__file__))
+
         self.defaultConfig = self.scriptLocation + "\\" + "config.json"
         self.setWindowIcon(QtGui.QIcon(self.scriptLocation + "\\" + "bbalogo.ico"))
 
-        #initlizes string to be used
-        #initilized to use Orlando Project Drive
+        # initlizes string to be used
+        # initilized to use Orlando Project Drive
         self.projectTargetLocation = "\\\\FB2\\BBA_Jobs"
         self.orlandoJobsLocation = "\\\\FB2\\BBA_Jobs"
         self.tampaJobsLocation = "\\\\BBA-Tampa\\Tampajobs"
@@ -64,26 +66,28 @@ class Main(QtGui.QMainWindow):
         # PYQT Widget Defintions
         #==============================================================================        
 
-        #main widget
+        # main widget
         self.centralWidget = QtGui.QWidget()
         self.centralWidget.setLayout(QtGui.QVBoxLayout())
 
-        #widget for project location radio buttons and year combobox
+        # widget for project location radio buttons and year combobox
         self.projectWidget = QtGui.QWidget()
         self.projectWidget.setLayout(QtGui.QHBoxLayout())
 
         projectName_lbl = QtGui.QLabel("Create Project for")
-
-        #widget for radio buttons to choose studio location
-        #set as a vertical layout to conserve space in UI
-        self.studioLocationWidget = QtGui.QWidget()
-        self.studioLocationWidget.setLayout(QtGui.QVBoxLayout())
-
         self.orlando_radioBtn = QtGui.QRadioButton("Orlando")
+        projectOr_lbl = QtGui.QLabel("- or -")
+        projectOr_lbl.setAlignment(QtCore.Qt.AlignCenter)
         self.tampa_radioBtn = QtGui.QRadioButton("Tampa")
 
         # set self.orlando_radioBtn to be true
         self.orlando_radioBtn.setChecked(True)
+
+        # widget for project number line edit
+        self.projectYearWidget = QtGui.QWidget()
+        self.projectYearWidget.setLayout(QtGui.QHBoxLayout())
+
+        projectYear_lbl = QtGui.QLabel("Project Year")
 
         # creates combobox for year
         self.projectYear_comboBox = QtGui.QComboBox()
@@ -101,77 +105,69 @@ class Main(QtGui.QMainWindow):
         # iterate over years to fill years combobox
         for x in YEARS:
             self.projectYear_comboBox.addItem(QtCore.QString(str(x)))
-
+        
         # widget for project number line edit
         self.projectNumberWidget = QtGui.QWidget()
         self.projectNumberWidget.setLayout(QtGui.QHBoxLayout())
 
-        searchProjectName_lbl = QtGui.QLabel("Enter Project Number ")
-        self.nameOfProject_le = QtGui.QLineEdit()
-        self.nameOfProject_le.setPlaceholderText("Enter Number Here...")
+        projectNumber_lbl = QtGui.QLabel("Project Number")
+        self.numberOfProject_le = QtGui.QLineEdit()
+        self.numberOfProject_le.setPlaceholderText("Enter Number Here...")
 
-        projectNameDot_lbl = QtGui.QLabel(".")
-        self.projectDecimals_le = QtGui.QLineEdit("00")
+        # Validator in QtGui
+        validator = QtGui.QDoubleValidator()
+        validator.setDecimals(2)
+        validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
 
-        #Validator in QtGui
-        doubleValidator = QtGui.QDoubleValidator()
-        doubleValidator.setDecimals(2)
-        doubleValidator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-
-        self.nameOfProject_le.setValidator(doubleValidator)
-
-        #defined width to limit size of lineEdit for decimal place
-        width = self.projectDecimals_le.fontMetrics().boundingRect("00").width() + 10
-        self.projectDecimals_le.setMaximumWidth(width)
+        self.numberOfProject_le.setValidator(validator)
 
         self.actionButtonWidget = QtGui.QWidget()
         self.actionButtonWidget.setLayout(QtGui.QVBoxLayout())
 
-        self.addProject = QtGui.QPushButton("Add Project")        
+        self.addProject = QtGui.QPushButton("Create Project")        
         self.copySourceAssetPath_bttn = QtGui.QPushButton("Copy Project Path")
 
         #==============================================================================
         # PYQT Widget Assignments
         #==============================================================================
 
-        self.studioLocationWidget.layout().layout().addWidget(self.orlando_radioBtn)
-        self.studioLocationWidget.layout().layout().addWidget(self.tampa_radioBtn)
-
         self.projectWidget.layout().layout().addWidget(projectName_lbl)
-        self.projectWidget.layout().layout().addWidget(self.studioLocationWidget)
-        self.projectWidget.layout().layout().addWidget(self.projectYear_comboBox)
+        self.projectWidget.layout().layout().addWidget(self.orlando_radioBtn)
+        self.projectWidget.layout().layout().addWidget(projectOr_lbl)
+        self.projectWidget.layout().layout().addWidget(self.tampa_radioBtn)        
 
         self.addDeleteWidget = QtGui.QWidget()
         self.addDeleteWidget.setLayout(QtGui.QHBoxLayout())
 
         self.addDeleteWidget.layout().layout().addWidget(self.addProject)
 
-        self.projectNumberWidget.layout().layout().addWidget(searchProjectName_lbl)
-        self.projectNumberWidget.layout().layout().addWidget(self.nameOfProject_le)
-        self.projectNumberWidget.layout().layout().addWidget(projectNameDot_lbl)
-        self.projectNumberWidget.layout().layout().addWidget(self.projectDecimals_le)
+        self.projectYearWidget.layout().layout().addWidget(projectYear_lbl)
+        self.projectYearWidget.layout().layout().addWidget(self.projectYear_comboBox)
 
+        self.projectNumberWidget.layout().layout().addWidget(projectNumber_lbl)
+        self.projectNumberWidget.layout().layout().addWidget(self.numberOfProject_le)
+
+        self.actionButtonWidget.layout().layout().addWidget(self.projectYearWidget)
         self.actionButtonWidget.layout().layout().addWidget(self.projectNumberWidget)
         self.actionButtonWidget.layout().layout().addWidget(self.addDeleteWidget)
         self.actionButtonWidget.layout().layout().addWidget(self.copySourceAssetPath_bttn)
         
-        #adds project widget and tools widget to central widget
+        # adds project widget and tools widget to central widget
         self.centralWidget.layout().addWidget(self.projectWidget)
         self.centralWidget.layout().addWidget(self.actionButtonWidget)
 
-        #sets central widget for PyQt window
+        # sets central widget for PyQt window
         self.setCentralWidget(self.centralWidget)
 
         #==============================================================================
         # PYQT Execution Connections
         #==============================================================================
 
+        # triggers for buttons
         self.addProject.clicked.connect(lambda: self.createProject())
         self.copySourceAssetPath_bttn.clicked.connect(lambda: self.copyProjectPath())
 
-        self.projectYear_comboBox.currentIndexChanged.connect(lambda: self.fillProjectComboBox(self.project_comboBox, (str(self.orlandoJobsLocation) + "\\" + str(self.projectYear_comboBox.currentText()))))
-        self.projectYear_comboBox.currentIndexChanged.connect(lambda: self.createCompleter(self.nameOfProject_le))
-
+        # toggle trigger for orlando_radioBtn which connects to function that is used by both radio buttons
         self.orlando_radioBtn.toggled.connect(lambda: self.checkRadioButtonState())
 
     def checkRadioButtonState(self):
@@ -204,16 +200,18 @@ class Main(QtGui.QMainWindow):
         """ Adds current project path to clipboard """
 
         # if project number line edit is not empty
-        if self.nameOfProject_le.text():
+        if self.numberOfProject_le.text():
             
             # creates variable of target path
-            path = str(self.projectTargetLocation) + "\\" + str(
-                self.projectYear_comboBox.currentText()) + "\\" + str(self.nameOfProject_le.text()) + "." + \
-                str(self.projectDecimals_le.text())
+            path = str(self.projectTargetLocation) + "\\" + str(self.projectYear_comboBox.currentText()) + "\\" + \
+                str(self.numberOfProject_le.text())
             
             # if path is valid, copies string of path to clipboard
             if self.osPath(path):
-                pyperclip.copy(str(path))
+
+                clipboard = QtGui.QApplication.clipboard()
+                clipboard.clear()
+                clipboard.setText(path)
 
                 self.popupOkWindow(path + "\n" + "was copied to your clipboard")
             else:
@@ -242,20 +240,6 @@ class Main(QtGui.QMainWindow):
         popupWindow.setStandardButtons(QtGui.QMessageBox.Ok)
 
         popupWindow.exec_()
-    
-    def checkLineEditState(self, lineEdit):
-        """ Function used to create color feedback based on correct input into tool """
-
-        sender = lineEdit
-        validator = sender.validator()
-        state = validator.validate(sender.text(), 0)[0]
-
-        if state == QtGui.QValidator.Acceptable:
-            fontColor = '#000000' # black
-            bgColor = '#c4df9b' # green
-            sender.setStyleSheet('QlineEdit { color: %s; background-color: %s }' % (fontColor, bgColor))
-        elif sender.text() == "":
-            sender.setStyleSheet('')
 
     #function to create window to 
     def createProject(self):
@@ -264,12 +248,11 @@ class Main(QtGui.QMainWindow):
         #runs some if else statements to check what was clicked since buttons were set to checkable
         #if create_btn.isChecked():
         #if preRendered_radioBtn.isChecked() or realTime_radioBtn.isChecked():
-        if not self.nameOfProject_le.text() == "":
+        if not self.numberOfProject_le.text() == "":
             
             # creates variable of target path
-            newPath = self.projectTargetLocation + "\\" + self.projectYear_comboBox.currentText() + \
-                "\\" + str(self.nameOfProject_le.text()) + "." + \
-                str(self.projectDecimals_le.text())
+            newPath = str(self.projectTargetLocation) + "\\" + str(self.projectYear_comboBox.currentText()) + \
+                "\\" + str(self.numberOfProject_le.text())
             
             #if path does not exist, the directory will be created based on JSON folder structure
             if not os.path.exists(newPath):
@@ -291,7 +274,8 @@ class Main(QtGui.QMainWindow):
 
                             os.mkdir(newPath + "\\" + str(key) + "\\" + str(item))                        
                     
-                    self.popupOkWindow("Successfully Created Structure For: " + str(self.nameOfProject_le.text()))
+                    self.popupOkWindow("Successfully Created Structure For: " + str(self.numberOfProject_le.text()))
+                    
                 except:
                     self.popupOkWindow("AN ERROR OCCURED WHEN MAKING THE FOLDER STRUCTURE")
             else:

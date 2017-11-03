@@ -61,20 +61,20 @@
         "3.0 - PDF": [],
         "4.0 - Photos": [],
         "5.0 - Concept-SD": [
-            "4.1 - Scans",
-            "4.2 - Photos",
-            "4.3 - Site Plans",
-            "4.4 - Floor Plans",
-            "4.5 - Elevations",
-            "4.6 - Sections",
-            "4.7 - Perspectives",
-            "4.8 - Renderings"
+            "5.1 - Scans",
+            "5.2 - Photos",
+            "5.3 - Site Plans",
+            "5.4 - Floor Plans",
+            "5.5 - Elevations",
+            "5.6 - Sections",
+            "5.7 - Perspectives",
+            "5.8 - Renderings"
         ],
         "6.0 - Presentations": [
-            "5.1 - Indesign",
-            "5.2 - PDFs",
-            "5.3 - PPT",
-            "5.4 - Nscape"
+            "6.1 - Indesign",
+            "6.2 - PDFs",
+            "6.3 - PPT",
+            "6.4 - Nscape"
         ]
     }
 }
