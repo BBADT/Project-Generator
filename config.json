@@ -1,5 +1,5 @@
 {
-    "BBA Structure": {
+    "Large Project (Architectural)": {
         "1.0 - Administration": [
             "1.1 - Project Directory",
             "1.2 - Program",
@@ -75,6 +75,61 @@
             "6.2 - PDFs",
             "6.3 - PPT",
             "6.4 - Nscape"
+        ]
+    },
+    "Small Project (Interior/Landscape)": {
+        "1.0 - Administration": [
+            "1.0 - Project Directory",
+            "1.5 - Specification Information",
+
+            "2.1 - Scope of Work",
+            "2.2 - Consultant Contracts",
+
+            "3.0 - General Correspondence",
+
+            "4.0 - AHJ Code Correspondence",
+
+            "5.0 - Bidding Negotiations",
+
+            "7.0 - Submittals (Shop Drawings)",
+
+            "8.0 - Specific Issues (track project specific items that arise during the project)"
+        ],
+        "2.0 - Drawings": [
+            "Archive"
+        ],
+        "3.0 - PDF": [
+            "3.1 - Civil",
+            "3.2 - Landscape",
+            "3.3 - Structural",
+            "3.4 - MEP_&_FP",
+            "3.5 - Interior_Design",
+            "3.6 - Others"
+        ],
+        "4.0 - Photos": [],
+        "5.0 - Concept-SD": [
+            "5.1 - Scans"
+        ],
+        "6.0 - Presentations": []
+    },
+    "Orlando Revit": {
+        "_Archive": [
+            "_01_SDs",
+            "_02_DDs",
+            "_03_CDs_30-Prcnt",
+            "_04_CDs_60-Prcnt",
+            "_05_CDs_100-Prcnt",
+            "_06_CDs_BID",
+            "_07_CDs_PERMIT",
+            "_08_CDs_CONFORMED"
+        ],
+        "_Exports": [
+            "_01_Revit",
+            "_02_AutoCAD",
+            "_03_Navisworks",
+            "_04_IFC",
+            "_05_PDF",
+            "_06_Schedules"
         ]
     }
 }
