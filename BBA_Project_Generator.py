@@ -3,8 +3,8 @@
 #title           :BBA_Project_Generator.py
 #description     :Script used to automate project folder creation
 #author          :Doug Halley
-#date            :20171103
-#version         :2.0
+#date            :20171107
+#version         :3.0
 #usage           :Standalone Python Application Executed by BBA_Project_Generator.exe
 #notes           :
 #python_version  :2.7.14
